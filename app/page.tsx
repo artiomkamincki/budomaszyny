@@ -1,24 +1,24 @@
 import Link from "next/link";
 import { EQUIPMENT_CATEGORIES } from "./lib/types";
 import {
-  Tractor,
-  Forklift,
-  Construction,
-  HardHat,
-  Zap,
-  Drill,
-  Fence,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+  ExcavatorIcon,
+  WheelLoaderIcon,
+  CraneIcon,
+  RoadRollerIcon,
+  GeneratorIcon,
+  ConcreteMixerIcon,
+  ScaffoldingIcon,
+} from "./components/EquipmentIcons";
+import type { ComponentType } from "react";
 
-const categoryIcons: Record<string, LucideIcon> = {
-  "Maszyny ziemne": Tractor,
-  "Ładowarki i transport": Forklift,
-  "Dźwigi i podnośniki": Construction,
-  "Maszyny drogowe": HardHat,
-  "Zasilanie i ogrzewanie": Zap,
-  "Lekki sprzęt budowlany": Drill,
-  "Wyposażenie budowy": Fence,
+const categoryIcons: Record<string, ComponentType<{ className?: string }>> = {
+  "Maszyny ziemne": ExcavatorIcon,
+  "Ładowarki i transport": WheelLoaderIcon,
+  "Dźwigi i podnośniki": CraneIcon,
+  "Maszyny drogowe": RoadRollerIcon,
+  "Zasilanie i ogrzewanie": GeneratorIcon,
+  "Lekki sprzęt budowlany": ConcreteMixerIcon,
+  "Wyposażenie budowy": ScaffoldingIcon,
 };
 
 const steps = [
@@ -114,15 +114,17 @@ export default function HomePage() {
             {EQUIPMENT_CATEGORIES.map((cat) => {
               const Icon = categoryIcons[cat.category];
               return (
-              <div key={cat.category} className="rounded-xl bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-3 flex items-center gap-2">
+              <div key={cat.category} className="rounded-xl bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-4 border-b border-gray-100 pb-4 mb-4">
                   {Icon && (
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
-                      <Icon className="h-5 w-5" />
+                    <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+                      <Icon className="h-12 w-12" />
                     </span>
                   )}
-                  {cat.category}
-                </h3>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    {cat.category}
+                  </h3>
+                </div>
                 <ul className="space-y-1">
                   {cat.types.map((t) => (
                     <li key={t.value}>
