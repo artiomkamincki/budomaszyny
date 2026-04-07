@@ -2,7 +2,8 @@
 
 import { supabase } from "./supabase";
 import { redirect } from "next/navigation";
-import { notifyNewRequest } from "./email";
+import { revalidatePath } from "next/cache";
+import { notifyNewRequest, notifyOwnerWelcome } from "./email";
 
 export async function submitRentalRequest(formData: FormData) {
   const name = formData.get("name") as string;
@@ -92,5 +93,59 @@ export async function registerOwner(formData: FormData) {
     if (listingError) throw new Error(listingError.message);
   }
 
-  redirect("/wynajmuje/dziekujemy");
+  // Send welcome email with dashboard link (don't block redirect)
+  notifyOwnerWelcome({ email, company_name, ownerId: owner.id }).catch(() => {});
+
+  redirect(`/moje/${owner.id}`);
+}
+
+export async function addMachineToOwner(formData: FormData) {
+  const owner_id = formData.get("owner_id") as string;
+  const equipment_type = formData.get("equipment_type") as string;
+  const manufacturer = (formData.get("manufacturer") as string) || null;
+  const model = (formData.get("model") as string) || null;
+  const year = formData.get("year")
+    ? parseInt(formData.get("year") as string)
+    : null;
+  const daily_rate = formData.get("daily_rate")
+    ? parseInt(formData.get("daily_rate") as string)
+    : null;
+  const location_city = (formData.get("location_city") as string) || null;
+
+  if (!owner_id || !equipment_type) {
+    throw new Error("Wypełnij wymagane pola");
+  }
+
+  const { error } = await supabase.from("listings").insert({
+    owner_id,
+    equipment_type,
+    manufacturer,
+    model,
+    year,
+    daily_rate,
+    location_city,
+  });
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath(`/moje/${owner_id}`);
+  redirect(`/moje/${owner_id}`);
+}
+
+export async function removeMachine(formData: FormData) {
+  const listing_id = formData.get("listing_id") as string;
+  const owner_id = formData.get("owner_id") as string;
+
+  if (!listing_id || !owner_id) return;
+
+  const { error } = await supabase
+    .from("listings")
+    .delete()
+    .eq("id", listing_id)
+    .eq("owner_id", owner_id);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath(`/moje/${owner_id}`);
+  redirect(`/moje/${owner_id}`);
 }

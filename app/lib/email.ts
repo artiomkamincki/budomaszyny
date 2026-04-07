@@ -56,3 +56,27 @@ export async function notifyOwnerLead(
     `,
   });
 }
+
+export async function notifyOwnerWelcome(data: {
+  email: string;
+  company_name: string;
+  ownerId: string;
+}) {
+  await resend.emails.send({
+    from: "BudoMaszyny <onboarding@resend.dev>",
+    to: data.email,
+    subject: `Witamy w BudoMaszyny, ${data.company_name}!`,
+    html: `
+      <h2>Rejestracja zakończona!</h2>
+      <p>Cześć! Twoja firma <strong>${data.company_name}</strong> została dodana do bazy BudoMaszyny.</p>
+      <p>Twój panel — tutaj możesz zarządzać maszynami i przeglądać zapytania:</p>
+      <br/>
+      <a href="${SITE_URL}/moje/${data.ownerId}" style="background:#f59e0b;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;">
+        Mój panel
+      </a>
+      <br/><br/>
+      <p style="color:#666;">Zapisz ten link — to Twój dostęp do panelu.</p>
+      <p style="color:#999;font-size:12px;">BudoMaszyny — wynajem maszyn budowlanych w całej Polsce.</p>
+    `,
+  });
+}
