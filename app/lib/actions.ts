@@ -64,7 +64,12 @@ export async function registerOwner(
     .select("id")
     .single();
 
-  if (ownerError) return { error: `Błąd rejestracji: ${ownerError.message}` };
+  if (ownerError) {
+    if (ownerError.code === "23505") {
+      return { error: "Ten adres email jest już zarejestrowany. Jeśli to Twoje konto, sprawdź email powitalny — znajdziesz tam link do panelu." };
+    }
+    return { error: `Błąd rejestracji: ${ownerError.message}` };
+  }
 
   // Insert all machines
   const machineCount = parseInt(formData.get("machine_count") as string) || 1;
