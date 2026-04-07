@@ -2,6 +2,7 @@
 
 import { getServiceClient } from "./admin-data";
 import { revalidatePath } from "next/cache";
+import { notifyOwnerLead } from "./email";
 
 export async function sendLead(formData: FormData) {
   const request_id = formData.get("request_id") as string;
@@ -13,10 +14,11 @@ export async function sendLead(formData: FormData) {
 
   const db = getServiceClient();
 
-  const { error } = await db.from("leads").insert({
-    request_id,
-    owner_id,
-  });
+  const { data: lead, error } = await db
+    .from("leads")
+    .insert({ request_id, owner_id })
+    .select("id")
+    .single();
 
   if (error) throw new Error(error.message);
 
@@ -25,6 +27,21 @@ export async function sendLead(formData: FormData) {
     .from("requests")
     .update({ status: "matched" })
     .eq("id", request_id);
+
+  // Get owner email and request details for notification
+  const [ownerRes, requestRes] = await Promise.all([
+    db.from("owners").select("email").eq("id", owner_id).single(),
+    db.from("requests").select("equipment_type, city").eq("id", request_id).single(),
+  ]);
+
+  if (ownerRes.data && requestRes.data) {
+    notifyOwnerLead(
+      ownerRes.data.email,
+      lead.id,
+      requestRes.data.equipment_type,
+      requestRes.data.city
+    ).catch(() => {});
+  }
 
   revalidatePath("/admin");
 }

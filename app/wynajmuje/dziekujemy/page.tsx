@@ -16,7 +16,7 @@ export default function DziekujemyOwnerPage() {
         pasujące do Twojej oferty, wyślemy Ci <strong>email z danymi kontaktowymi</strong> klienta.
       </p>
       <p className="mt-2 text-gray-500">
-        Chcesz dodać więcej maszyn? Napisz do nas: kontakt@budomaszyny.pl
+        Chcesz dodać więcej maszyn? Napisz do nas: artiom.kamincki@gmail.com
       </p>
       <Link
         href="/"

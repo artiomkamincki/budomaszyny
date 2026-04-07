@@ -2,6 +2,7 @@
 
 import { supabase } from "./supabase";
 import { redirect } from "next/navigation";
+import { notifyNewRequest } from "./email";
 
 export async function submitRentalRequest(formData: FormData) {
   const name = formData.get("name") as string;
@@ -31,6 +32,9 @@ export async function submitRentalRequest(formData: FormData) {
   });
 
   if (error) throw new Error(error.message);
+
+  // Send email notification (don't block redirect on failure)
+  notifyNewRequest({ equipment_type, city, name, phone, email, description }).catch(() => {});
 
   redirect("/szukam/dziekujemy");
 }

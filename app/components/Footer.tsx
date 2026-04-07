@@ -6,7 +6,7 @@ export function Footer() {
           <span className="font-semibold text-gray-700">BudoMaszyny</span> —
           wynajem maszyn budowlanych w Polsce
         </p>
-        <p className="mt-1">kontakt@budomaszyny.pl</p>
+        <p className="mt-1">artiom.kamincki@gmail.com</p>
       </div>
     </footer>
   );
