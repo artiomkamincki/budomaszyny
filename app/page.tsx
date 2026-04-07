@@ -1,5 +1,25 @@
 import Link from "next/link";
 import { EQUIPMENT_CATEGORIES } from "./lib/types";
+import {
+  Tractor,
+  Forklift,
+  Construction,
+  HardHat,
+  Zap,
+  Drill,
+  Fence,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+const categoryIcons: Record<string, LucideIcon> = {
+  "Maszyny ziemne": Tractor,
+  "Ładowarki i transport": Forklift,
+  "Dźwigi i podnośniki": Construction,
+  "Maszyny drogowe": HardHat,
+  "Zasilanie i ogrzewanie": Zap,
+  "Lekki sprzęt budowlany": Drill,
+  "Wyposażenie budowy": Fence,
+};
 
 const steps = [
   {
@@ -34,12 +54,16 @@ export default function HomePage() {
             Koparki, dźwigi, ładowarki — wynajem od sprawdzonych firm w całej
             Polsce. Bez pośredników, bez prowizji dla szukających.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-1.5 text-sm font-semibold text-green-700">
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+            Szukanie maszyny — zawsze bezpłatnie
+          </div>
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/szukam"
               className="inline-flex items-center justify-center rounded-xl bg-amber-500 px-8 py-4 text-lg font-bold text-white shadow-lg hover:bg-amber-600 hover:shadow-xl transition-all"
             >
-              Szukam maszyny
+              Szukam maszyny — za darmo
             </Link>
             <Link
               href="/wynajmuje"
@@ -83,10 +107,20 @@ export default function HomePage() {
             Znajdziemy dla Ciebie każdy sprzęt budowlany. Kliknij, aby wysłać
             zapytanie.
           </p>
+          <p className="mt-2 text-center text-sm font-medium text-green-600">
+            Wszystkie zapytania są bezpłatne — zero prowizji, zero ukrytych kosztów
+          </p>
           <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {EQUIPMENT_CATEGORIES.map((cat) => (
-              <div key={cat.category} className="rounded-xl bg-white p-5 shadow-sm">
-                <h3 className="font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-3">
+            {EQUIPMENT_CATEGORIES.map((cat) => {
+              const Icon = categoryIcons[cat.category];
+              return (
+              <div key={cat.category} className="rounded-xl bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
+                <h3 className="font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-3 flex items-center gap-2">
+                  {Icon && (
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                  )}
                   {cat.category}
                 </h3>
                 <ul className="space-y-1">
@@ -102,11 +136,12 @@ export default function HomePage() {
                   ))}
                 </ul>
               </div>
-            ))}
+              );
+            })}
           </div>
           <div className="mt-8 text-center">
             <Link
-              href="/szukam"
+              href="/szukam?type=inne"
               className="text-amber-600 font-medium hover:underline"
             >
               Nie znalazłeś swojej maszyny? Wyślij zapytanie z opisem &rarr;
