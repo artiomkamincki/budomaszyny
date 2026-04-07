@@ -41,7 +41,10 @@ export async function submitRentalRequest(formData: FormData) {
   redirect("/szukam/dziekujemy");
 }
 
-export async function registerOwner(formData: FormData) {
+export async function registerOwner(
+  _prevState: { error?: string } | null,
+  formData: FormData
+): Promise<{ error?: string }> {
   const supabase = getServiceClient();
   const company_name = formData.get("company_name") as string;
   const contact_person = formData.get("contact_person") as string;
@@ -51,7 +54,7 @@ export async function registerOwner(formData: FormData) {
   const nip = (formData.get("nip") as string) || null;
 
   if (!company_name || !contact_person || !phone || !email || !city) {
-    throw new Error("Wypełnij wymagane pola");
+    return { error: "Wypełnij wymagane pola" };
   }
 
   // Insert owner
@@ -61,7 +64,7 @@ export async function registerOwner(formData: FormData) {
     .select("id")
     .single();
 
-  if (ownerError) throw new Error(ownerError.message);
+  if (ownerError) return { error: `Błąd rejestracji: ${ownerError.message}` };
 
   // Insert all machines
   const machineCount = parseInt(formData.get("machine_count") as string) || 1;
@@ -92,7 +95,7 @@ export async function registerOwner(formData: FormData) {
       .from("listings")
       .insert(listings);
 
-    if (listingError) throw new Error(listingError.message);
+    if (listingError) return { error: `Błąd dodawania maszyn: ${listingError.message}` };
   }
 
   // Send welcome email with dashboard link (don't block redirect)
