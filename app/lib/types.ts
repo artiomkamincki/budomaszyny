@@ -131,3 +131,52 @@ export interface Lead {
   request?: RentalRequest;
   owner?: Owner;
 }
+
+// --- Prospects CRM ---
+
+export type ProspectSource = "olx" | "ceidg" | "google_maps" | "manual";
+export type ProspectStatus =
+  | "new"
+  | "queued"
+  | "contacted"
+  | "responded"
+  | "registered"
+  | "rejected";
+
+export interface Prospect {
+  id: string;
+  source: ProspectSource;
+  source_url: string | null;
+  source_id: string | null;
+  company_name: string | null;
+  contact_person: string | null;
+  phone: string | null;
+  email: string | null;
+  city: string | null;
+  voivodeship: string | null;
+  nip: string | null;
+  regon: string | null;
+  equipment_description: string | null;
+  equipment_types: string[] | null;
+  status: ProspectStatus;
+  dedup_key: string | null;
+  notes: string | null;
+  owner_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OutreachLog {
+  id: string;
+  prospect_id: string;
+  channel: "email" | "phone" | "manual";
+  template_key: string | null;
+  subject: string | null;
+  resend_email_id: string | null;
+  sent_at: string;
+  opened_at: string | null;
+  clicked_at: string | null;
+  response: string | null;
+  response_at: string | null;
+  notes: string | null;
+}
