@@ -7,7 +7,12 @@ export const metadata = {
     "Opisz jakiej maszyny budowlanej szukasz, a my znajdziemy dla Ciebie oferty od sprawdzonych firm w Twojej okolicy.",
 };
 
-export default function SzukamPage() {
+export default async function SzukamPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>;
+}) {
+  const { type } = await searchParams;
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
       <h1 className="text-3xl font-bold text-gray-900">Szukam maszyny</h1>
@@ -29,6 +34,7 @@ export default function SzukamPage() {
             id="equipment_type"
             name="equipment_type"
             required
+            defaultValue={type || ""}
             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-gray-900 focus:border-amber-500 focus:ring-amber-500"
           >
             <option value="">Wybierz typ...</option>

@@ -1,16 +1,18 @@
 import Link from "next/link";
 
 const equipmentTypes = [
-  { name: "Koparki", icon: "🏗️" },
-  { name: "Ładowarki", icon: "🚜" },
-  { name: "Dźwigi", icon: "🏗️" },
-  { name: "Podnośniki", icon: "🔧" },
-  { name: "Walce", icon: "🛞" },
-  { name: "Minikoparki", icon: "⛏️" },
-  { name: "Koparko-ładowarki", icon: "🚧" },
-  { name: "Agregaty", icon: "⚡" },
-  { name: "Rusztowania", icon: "🏢" },
-  { name: "I wiele więcej...", icon: "➕" },
+  { value: "koparka", name: "Koparki", icon: "🦾" },
+  { value: "minikoparka", name: "Minikoparki", icon: "⛏️" },
+  { value: "ladowarka", name: "Ładowarki", icon: "🚜" },
+  { value: "koparko-ladowarka", name: "Koparko-ładowarki", icon: "🚧" },
+  { value: "dzwig", name: "Dźwigi", icon: "🏗️" },
+  { value: "podnosnik", name: "Podnośniki", icon: "🔼" },
+  { value: "walec", name: "Walce", icon: "🛞" },
+  { value: "zageszczarka", name: "Zagęszczarki", icon: "🔨" },
+  { value: "ladowarka-teleskopowa", name: "Ładowarki teleskopowe", icon: "📐" },
+  { value: "rusztowanie", name: "Rusztowania", icon: "🪜" },
+  { value: "agregat", name: "Agregaty", icon: "⚡" },
+  { value: "inne", name: "Inne maszyny", icon: "➕" },
 ];
 
 const steps = [
@@ -94,17 +96,18 @@ export default function HomePage() {
           <p className="mt-4 text-center text-gray-600">
             Znajdziemy dla Ciebie każdy sprzęt budowlany
           </p>
-          <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {equipmentTypes.map((eq) => (
-              <div
-                key={eq.name}
-                className="flex flex-col items-center rounded-xl bg-white p-4 shadow-sm hover:shadow-md transition-shadow"
+              <Link
+                key={eq.value}
+                href={`/szukam?type=${eq.value}`}
+                className="flex flex-col items-center rounded-xl bg-white p-5 shadow-sm hover:shadow-md hover:border-amber-300 border border-transparent transition-all"
               >
-                <span className="text-3xl">{eq.icon}</span>
+                <span className="text-4xl">{eq.icon}</span>
                 <span className="mt-2 text-sm font-medium text-gray-700">
                   {eq.name}
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
