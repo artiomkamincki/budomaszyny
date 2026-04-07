@@ -47,17 +47,6 @@ export async function registerOwner(formData: FormData) {
   const city = formData.get("city") as string;
   const nip = (formData.get("nip") as string) || null;
 
-  const equipment_type = formData.get("equipment_type") as string;
-  const manufacturer = (formData.get("manufacturer") as string) || null;
-  const model = (formData.get("model") as string) || null;
-  const year = formData.get("year")
-    ? parseInt(formData.get("year") as string)
-    : null;
-  const daily_rate = formData.get("daily_rate")
-    ? parseInt(formData.get("daily_rate") as string)
-    : null;
-  const location_city = (formData.get("location_city") as string) || city;
-
   if (!company_name || !contact_person || !phone || !email || !city) {
     throw new Error("Wypełnij wymagane pola");
   }
@@ -71,17 +60,34 @@ export async function registerOwner(formData: FormData) {
 
   if (ownerError) throw new Error(ownerError.message);
 
-  // Insert listing if equipment type provided
-  if (equipment_type) {
-    const { error: listingError } = await supabase.from("listings").insert({
+  // Insert all machines
+  const machineCount = parseInt(formData.get("machine_count") as string) || 1;
+
+  const listings = [];
+  for (let i = 0; i < machineCount; i++) {
+    const equipment_type = formData.get(`equipment_type_${i}`) as string;
+    if (!equipment_type) continue;
+
+    listings.push({
       owner_id: owner.id,
       equipment_type,
-      manufacturer,
-      model,
-      year,
-      daily_rate,
-      location_city,
+      manufacturer: (formData.get(`manufacturer_${i}`) as string) || null,
+      model: (formData.get(`model_${i}`) as string) || null,
+      year: formData.get(`year_${i}`)
+        ? parseInt(formData.get(`year_${i}`) as string)
+        : null,
+      daily_rate: formData.get(`daily_rate_${i}`)
+        ? parseInt(formData.get(`daily_rate_${i}`) as string)
+        : null,
+      location_city:
+        (formData.get(`location_city_${i}`) as string) || city,
     });
+  }
+
+  if (listings.length > 0) {
+    const { error: listingError } = await supabase
+      .from("listings")
+      .insert(listings);
 
     if (listingError) throw new Error(listingError.message);
   }

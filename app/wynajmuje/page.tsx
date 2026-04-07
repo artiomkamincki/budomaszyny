@@ -1,5 +1,5 @@
-import { EQUIPMENT_CATEGORIES } from "../lib/types";
 import { registerOwner } from "../lib/actions";
+import MachineFields from "../components/MachineFields";
 
 export const metadata = {
   title: "Zarejestruj maszynę — BudoMaszyny",
@@ -128,130 +128,13 @@ export default function WynajmujePage() {
         <hr className="border-gray-200" />
 
         <h2 className="text-lg font-semibold text-gray-900">
-          Twoja maszyna
+          Twoje maszyny
         </h2>
         <p className="text-sm text-gray-500">
-          Dodaj przynajmniej jedną maszynę. Więcej możesz dodać później.
+          Dodaj swoje maszyny. Możesz dodać jedną lub od razu cały park.
         </p>
 
-        {/* Equipment type */}
-        <div>
-          <label
-            htmlFor="equipment_type"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Rodzaj maszyny *
-          </label>
-          <select
-            id="equipment_type"
-            name="equipment_type"
-            required
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-gray-900 focus:border-amber-500 focus:ring-amber-500"
-          >
-            <option value="">Wybierz typ...</option>
-            {EQUIPMENT_CATEGORIES.map((cat) => (
-              <optgroup key={cat.category} label={cat.category}>
-                {cat.types.map((t) => (
-                  <option key={t.value} value={t.value}>
-                    {t.label}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-            <option value="inne">Inne — opiszę poniżej</option>
-          </select>
-          <p className="mt-1 text-xs text-gray-500">
-            Nie znalazłeś swojej maszyny? Wybierz &quot;Inne&quot; i opisz w polu Producent/Model.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          {/* Manufacturer */}
-          <div>
-            <label
-              htmlFor="manufacturer"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Producent
-            </label>
-            <input
-              type="text"
-              id="manufacturer"
-              name="manufacturer"
-              placeholder="np. CAT, Kubota"
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-gray-900 placeholder:text-gray-400 focus:border-amber-500 focus:ring-amber-500"
-            />
-          </div>
-          {/* Model */}
-          <div>
-            <label
-              htmlFor="model"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Model
-            </label>
-            <input
-              type="text"
-              id="model"
-              name="model"
-              placeholder="np. 320F"
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-gray-900 placeholder:text-gray-400 focus:border-amber-500 focus:ring-amber-500"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          {/* Year */}
-          <div>
-            <label
-              htmlFor="year"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Rok produkcji
-            </label>
-            <input
-              type="number"
-              id="year"
-              name="year"
-              min="1990"
-              max="2026"
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-gray-900 focus:border-amber-500 focus:ring-amber-500"
-            />
-          </div>
-          {/* Daily rate */}
-          <div>
-            <label
-              htmlFor="daily_rate"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Cena / dzień (PLN)
-            </label>
-            <input
-              type="number"
-              id="daily_rate"
-              name="daily_rate"
-              min="0"
-              placeholder="opcjonalnie"
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-gray-900 placeholder:text-gray-400 focus:border-amber-500 focus:ring-amber-500"
-            />
-          </div>
-        </div>
-
-        {/* Location city */}
-        <div>
-          <label
-            htmlFor="location_city"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Lokalizacja maszyny (jeśli inna niż siedziba firmy)
-          </label>
-          <input
-            type="text"
-            id="location_city"
-            name="location_city"
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-gray-900 focus:border-amber-500 focus:ring-amber-500"
-          />
-        </div>
+        <MachineFields />
 
         <button
           type="submit"
