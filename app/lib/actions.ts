@@ -1,11 +1,12 @@
 "use server";
 
-import { supabase } from "./supabase";
+import { getServiceClient } from "./supabase";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { notifyNewRequest, notifyOwnerWelcome } from "./email";
 
 export async function submitRentalRequest(formData: FormData) {
+  const supabase = getServiceClient();
   const name = formData.get("name") as string;
   const phone = formData.get("phone") as string;
   const email = (formData.get("email") as string) || null;
@@ -41,6 +42,7 @@ export async function submitRentalRequest(formData: FormData) {
 }
 
 export async function registerOwner(formData: FormData) {
+  const supabase = getServiceClient();
   const company_name = formData.get("company_name") as string;
   const contact_person = formData.get("contact_person") as string;
   const phone = formData.get("phone") as string;
@@ -100,6 +102,7 @@ export async function registerOwner(formData: FormData) {
 }
 
 export async function addMachineToOwner(formData: FormData) {
+  const supabase = getServiceClient();
   const owner_id = formData.get("owner_id") as string;
   const equipment_type = formData.get("equipment_type") as string;
   const manufacturer = (formData.get("manufacturer") as string) || null;
@@ -133,6 +136,7 @@ export async function addMachineToOwner(formData: FormData) {
 }
 
 export async function removeMachine(formData: FormData) {
+  const supabase = getServiceClient();
   const listing_id = formData.get("listing_id") as string;
   const owner_id = formData.get("owner_id") as string;
 

@@ -1,4 +1,4 @@
-import { supabase } from "../../lib/supabase";
+import { getServiceClient } from "../../lib/supabase";
 import { EQUIPMENT_TYPES } from "../../lib/types";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -21,6 +21,7 @@ export default async function OwnerDashboard({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const supabase = getServiceClient();
 
   // Fetch owner
   const { data: owner } = await supabase
