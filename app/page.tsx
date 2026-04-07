@@ -1,19 +1,5 @@
 import Link from "next/link";
-
-const equipmentTypes = [
-  { value: "koparka", name: "Koparki", icon: "🦾" },
-  { value: "minikoparka", name: "Minikoparki", icon: "⛏️" },
-  { value: "ladowarka", name: "Ładowarki", icon: "🚜" },
-  { value: "koparko-ladowarka", name: "Koparko-ładowarki", icon: "🚧" },
-  { value: "dzwig", name: "Dźwigi", icon: "🏗️" },
-  { value: "podnosnik", name: "Podnośniki", icon: "🔼" },
-  { value: "walec", name: "Walce", icon: "🛞" },
-  { value: "zageszczarka", name: "Zagęszczarki", icon: "🔨" },
-  { value: "ladowarka-teleskopowa", name: "Ładowarki teleskopowe", icon: "📐" },
-  { value: "rusztowanie", name: "Rusztowania", icon: "🪜" },
-  { value: "agregat", name: "Agregaty", icon: "⚡" },
-  { value: "inne", name: "Inne maszyny", icon: "➕" },
-];
+import { EQUIPMENT_CATEGORIES } from "./lib/types";
 
 const steps = [
   {
@@ -87,28 +73,44 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Equipment types */}
+      {/* Equipment catalog */}
       <section className="bg-gray-50 py-20">
         <div className="mx-auto max-w-6xl px-4">
           <h2 className="text-3xl font-bold text-center text-gray-900">
-            Rodzaje maszyn
+            Katalog sprzętu
           </h2>
           <p className="mt-4 text-center text-gray-600">
-            Znajdziemy dla Ciebie każdy sprzęt budowlany
+            Znajdziemy dla Ciebie każdy sprzęt budowlany. Kliknij, aby wysłać
+            zapytanie.
           </p>
-          <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {equipmentTypes.map((eq) => (
-              <Link
-                key={eq.value}
-                href={`/szukam?type=${eq.value}`}
-                className="flex flex-col items-center rounded-xl bg-white p-5 shadow-sm hover:shadow-md hover:border-amber-300 border border-transparent transition-all"
-              >
-                <span className="text-4xl">{eq.icon}</span>
-                <span className="mt-2 text-sm font-medium text-gray-700">
-                  {eq.name}
-                </span>
-              </Link>
+          <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {EQUIPMENT_CATEGORIES.map((cat) => (
+              <div key={cat.category} className="rounded-xl bg-white p-5 shadow-sm">
+                <h3 className="font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-3">
+                  {cat.category}
+                </h3>
+                <ul className="space-y-1">
+                  {cat.types.map((t) => (
+                    <li key={t.value}>
+                      <Link
+                        href={`/szukam?type=${t.value}`}
+                        className="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                      >
+                        {t.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/szukam"
+              className="text-amber-600 font-medium hover:underline"
+            >
+              Nie znalazłeś swojej maszyny? Wyślij zapytanie z opisem &rarr;
+            </Link>
           </div>
         </div>
       </section>

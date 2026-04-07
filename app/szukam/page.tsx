@@ -1,4 +1,4 @@
-import { EQUIPMENT_TYPES } from "../lib/types";
+import { EQUIPMENT_CATEGORIES } from "../lib/types";
 import { submitRentalRequest } from "../lib/actions";
 
 export const metadata = {
@@ -38,11 +38,16 @@ export default async function SzukamPage({
             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-gray-900 focus:border-amber-500 focus:ring-amber-500"
           >
             <option value="">Wybierz typ...</option>
-            {EQUIPMENT_TYPES.map((t) => (
-              <option key={t.value} value={t.value}>
-                {t.label}
-              </option>
+            {EQUIPMENT_CATEGORIES.map((cat) => (
+              <optgroup key={cat.category} label={cat.category}>
+                {cat.types.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </optgroup>
             ))}
+            <option value="inne">Inne — opiszę poniżej</option>
           </select>
         </div>
 
@@ -52,15 +57,18 @@ export default async function SzukamPage({
             htmlFor="description"
             className="block text-sm font-medium text-gray-700"
           >
-            Szczegóły
+            Szczegóły / opis maszyny
           </label>
           <textarea
             id="description"
             name="description"
             rows={3}
-            placeholder="np. Koparka gąsienicowa 20t z młotem hydraulicznym"
+            placeholder="np. Koparka gąsienicowa 20t z młotem hydraulicznym, potrzebuję na 2 tygodnie"
             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-gray-900 placeholder:text-gray-400 focus:border-amber-500 focus:ring-amber-500"
           />
+          <p className="mt-1 text-xs text-gray-500">
+            Nie znalazłeś maszyny na liście? Opisz tutaj czego szukasz — znajdziemy!
+          </p>
         </div>
 
         {/* City */}

@@ -1,4 +1,4 @@
-import { EQUIPMENT_TYPES } from "../lib/types";
+import { EQUIPMENT_CATEGORIES } from "../lib/types";
 import { registerOwner } from "../lib/actions";
 
 export const metadata = {
@@ -149,12 +149,20 @@ export default function WynajmujePage() {
             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-gray-900 focus:border-amber-500 focus:ring-amber-500"
           >
             <option value="">Wybierz typ...</option>
-            {EQUIPMENT_TYPES.map((t) => (
-              <option key={t.value} value={t.value}>
-                {t.label}
-              </option>
+            {EQUIPMENT_CATEGORIES.map((cat) => (
+              <optgroup key={cat.category} label={cat.category}>
+                {cat.types.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </optgroup>
             ))}
+            <option value="inne">Inne — opiszę poniżej</option>
           </select>
+          <p className="mt-1 text-xs text-gray-500">
+            Nie znalazłeś swojej maszyny? Wybierz &quot;Inne&quot; i opisz w polu Producent/Model.
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
