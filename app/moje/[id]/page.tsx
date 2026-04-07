@@ -3,7 +3,7 @@ import { EQUIPMENT_TYPES } from "../../lib/types";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import AddMachineForm from "./AddMachineForm";
-import RemoveMachineButton from "./RemoveMachineButton";
+import MachineCard from "./MachineCard";
 
 export const dynamic = "force-dynamic";
 
@@ -73,44 +73,12 @@ export default async function OwnerDashboard({
         {listings && listings.length > 0 ? (
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {listings.map((listing) => (
-              <div
+              <MachineCard
                 key={listing.id}
-                className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="font-semibold text-gray-900">
-                      {getTypeLabel(listing.equipment_type)}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {[listing.manufacturer, listing.model, listing.year]
-                        .filter(Boolean)
-                        .join(" · ") || "Brak szczegółów"}
-                    </p>
-                  </div>
-                  {listing.available ? (
-                    <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700">
-                      Dostępna
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-600">
-                      Niedostępna
-                    </span>
-                  )}
-                </div>
-                <div className="mt-3 flex items-center justify-between text-sm">
-                  <span className="text-gray-500">
-                    {listing.location_city || owner.city}
-                    {listing.daily_rate
-                      ? ` · ${listing.daily_rate} PLN/dzień`
-                      : ""}
-                  </span>
-                  <RemoveMachineButton
-                    listingId={listing.id}
-                    ownerId={id}
-                  />
-                </div>
-              </div>
+                listing={listing}
+                ownerId={id}
+                ownerCity={owner.city}
+              />
             ))}
           </div>
         ) : (
